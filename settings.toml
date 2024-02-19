@@ -1,0 +1,5 @@
+[default]
+TITLE = 'TryCars'
+
+[development]
+SQLALCHEMY_DATABASE_URI = "sqlite:///base.db"

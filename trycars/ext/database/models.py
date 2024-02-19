@@ -16,6 +16,7 @@ class RolesUsers(db.Model):
 class Role(db.Model, RoleMixin):
     id:Mapped[int] = mapped_column(primary_key=True)
     name:Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
+    description:Mapped[Optional[str]] = mapped_column(String(255))
     permissions:Mapped[MutableList] = mapped_column(MutableList.as_mutable(AsaList()), nullable=True)
 
     users:Mapped[List['User']] = relationship(secondary='roles_users', back_populates='roles')

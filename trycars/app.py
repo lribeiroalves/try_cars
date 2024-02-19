@@ -5,6 +5,8 @@ from trycars.ext.database import database
 from trycars.ext.commands import commands
 from trycars.ext.security import security
 
+from trycars.blueprints.webui import webui
+
 
 def create_app():
     app = Flask(__name__)
@@ -12,5 +14,6 @@ def create_app():
     database.init_app(app)
     commands.init_app(app)
     security.init_app(app)
+    webui.init_app(app)
 
     return app

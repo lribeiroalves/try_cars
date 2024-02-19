@@ -7,5 +7,5 @@ from flask_wtf import CSRFProtect
 def init_app(app):
     with app.app_context():        
         CSRFProtect(app)
-        user_datastore = SQLAlchemySessionUserDatastore(db, User, Role)
+        user_datastore = SQLAlchemySessionUserDatastore(db.session, User, Role)
         app.security = Security(app, user_datastore)

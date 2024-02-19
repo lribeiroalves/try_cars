@@ -1,8 +1,6 @@
 from .database import db
-from flask_security import UserMixin, RoleMixin, AsaList
 from sqlalchemy import String, Integer, DateTime, Boolean, ForeignKey, Table, Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.ext.mutable import MutableList
 from typing import Optional, List
 import datetime
 
@@ -13,11 +11,10 @@ class RolesUsers(db.Model):
     role_id = Column('role_id', Integer(), ForeignKey('role.id'))
 
 
-class Role(db.Model, RoleMixin):
+class Role(db.Model):
     id:Mapped[int] = mapped_column(primary_key=True)
     name:Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
     description:Mapped[Optional[str]] = mapped_column(String(255))
-    permissions:Mapped[MutableList] = mapped_column(MutableList.as_mutable(AsaList()), nullable=True)
 
     users:Mapped[List['User']] = relationship(secondary='roles_users', back_populates='roles')
 
@@ -25,7 +22,7 @@ class Role(db.Model, RoleMixin):
         return f'Role(id={self.id}, name={self.name}, permissions={self.permissions})'
 
 
-class User(db.Model, UserMixin):
+class User(db.Model):
     id:Mapped[int] = mapped_column(primary_key=True)
     email:Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     username:Mapped[Optional[str]] = mapped_column(String(64), unique=True)

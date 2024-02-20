@@ -1,8 +1,8 @@
 from email_validator import validate_email, EmailNotValidError
 
-# email = "lcuasribeiroalves@live.com"
+email = "lucasribeiroalves@live.com"
 # email = "lu_ks_2009@hotmail.com"
-email = "my+address@example.org"
+# email = "my+address@example.org"
 
 try:
 
@@ -14,6 +14,7 @@ try:
   # After this point, use only the normalized form of the email address,
   # especially before going to a database query.
   email = emailinfo.normalized
+  print(email)
 
 except EmailNotValidError as e:
 

@@ -1,7 +1,7 @@
 from flask import Blueprint
 from .views import register_views
 
-bp = Blueprint('webui', __name__)
+bp = Blueprint('development', __name__)
 
 
 def init_app(app):

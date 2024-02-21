@@ -5,7 +5,7 @@ from trycars.ext.database import database
 from trycars.ext.commands import commands
 from trycars.ext.mail_client import mail_client
 
-from trycars.blueprints.webui import webui
+from trycars.blueprints.development import dev_bp
 
 
 def create_app():
@@ -13,7 +13,7 @@ def create_app():
     configuration.init_app(app)
     database.init_app(app)
     commands.init_app(app)
-    webui.init_app(app)
+    dev_bp.init_app(app)
     mail_client.init_app(app)
 
 

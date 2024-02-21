@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}First Form{% endblock %}
+
+{% block body %}
+<form method="POST" action="{{ url_for('development.photo_form' ) }}">
+    {{ form.csrf_token }}
+    {{ form.photo.label }} {{ form.photo }}
+    <input type="submit" value="Go">
+</form>
+
+{% if form.photo.errors %}
+    <ul class="errors">
+    {% for error in form.photo.errors %}
+        <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% endblock %}

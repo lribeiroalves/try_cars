@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, redirect, url_for
 from flask_mail import Message
 
 from trycars.ext.database.database import db
@@ -6,9 +6,6 @@ from trycars.ext.database.models import *
 from trycars.ext.mail_client.mail_client import mail
 
 def register_views(bp):
-    @bp.route('/')
-    def index():
-        return 'Hello, World!'
     
     @bp.route('/database')
     def database():
@@ -34,3 +31,7 @@ def register_views(bp):
                     <button>Send Email</button>
                 </form>
             """
+    
+    @bp.route('/home')
+    def home():
+        return redirect(url_for('homepage.index'))

@@ -27,11 +27,6 @@ class User(db.Model):
     email:Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     username:Mapped[Optional[str]] = mapped_column(String(64), unique=True)
     password:Mapped[str] = mapped_column(String(255), nullable=False)
-    last_login_at:Mapped[Optional[datetime.datetime]] = mapped_column(DateTime(timezone=True))
-    current_login_at:Mapped[Optional[datetime.datetime]] = mapped_column(DateTime(timezone=True))
-    last_login_ip:Mapped[Optional[str]]
-    current_login_ip:Mapped[Optional[str]]
-    login_count:Mapped[Optional[int]]
     active:Mapped[bool] = mapped_column(Boolean())
     fs_uniquifier:Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
     confirmed_at:Mapped[Optional[datetime.datetime]] = mapped_column(DateTime(timezone=True))

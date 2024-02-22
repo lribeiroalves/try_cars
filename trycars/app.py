@@ -7,6 +7,7 @@ from trycars.ext.mail_client import mail_client
 
 from trycars.blueprints.development import bp_dev
 from trycars.blueprints.homepage import bp_home
+from trycars.blueprints.auth import bp_auth
 
 
 def create_app():
@@ -18,5 +19,6 @@ def create_app():
 
     bp_dev.init_app(app)
     bp_home.init_app(app)
+    bp_auth.init_app(app)
 
     return app

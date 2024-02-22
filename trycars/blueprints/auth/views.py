@@ -1,6 +1,5 @@
 from flask import render_template, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
-from secrets import 
 
 from trycars.ext.database.database import db
 from trycars.ext.database.models import *

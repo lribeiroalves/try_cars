@@ -16,6 +16,7 @@ def register_views(bp, app):
         return {
             'users':[str(user) for user in db.session.execute(db.select(User)).scalars()],
             'roles':[str(role) for role in db.session.execute(db.select(Role)).scalars()],
+            'relations': [f'User: {str(user.username)} --> Role: {str(user.roles.name)}' for user in db.session.execute(db.select(User)).scalars()],
         }
     
     @bp.route('/email', methods=['GET', 'POST'])

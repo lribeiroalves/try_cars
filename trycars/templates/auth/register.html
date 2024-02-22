@@ -3,7 +3,7 @@
 {% block title %}First Form{% endblock %}
 
 {% block body %}
-<form method="POST" action="{{ url_for('development.captcha' ) }}">
+<form method="POST" action="{{ url_for('auth.register') }}">
     {{ form.csrf_token }}
     <p>
         {{ form.username.label }}<br>
@@ -22,10 +22,27 @@
         {{ form.confirm_password(size=50) }}
     </p>
     <p>
+        {% for error in form.username.errors %}
+            {{ error }}
+        {% endfor %}
+    </p>
+    <p>
+        {% for error in form.email.errors %}
+            {{ error }}
+        {% endfor %}
+    </p>
+    <p>
+        <ul>
+            {% for error in form.password.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </p>
+    <p>
         {% for error in form.recaptcha.errors %}
             {{ error }}
         {% endfor %}
-        {{ form.recaptcha }}
+        <p>{{ form.recaptcha }}</p>
     </p>
     <p>
         <input type="submit" value="Register">

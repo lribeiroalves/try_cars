@@ -19,7 +19,7 @@ class Role(db.Model):
     users:Mapped[List['User']] = relationship(secondary='roles_users', back_populates='roles')
 
     def __repr__(self) -> str:
-        return f'Role(id={self.id}, name={self.name}, permissions={self.permissions})'
+        return f'Role(id={self.id}, name={self.name}, desciption={self.description})'
 
 
 class User(db.Model):

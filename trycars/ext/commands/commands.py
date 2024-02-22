@@ -16,8 +16,8 @@ def drop_db():
 
 def populate_db():
     roles = [
-        Role(name = 'admin', permissions = ['admin-read', 'admin-write']),
-        Role(name = 'user', permissions = ['user-read', 'user-write']),
+        Role(name = 'admin', description='Admin User Privileges'),
+        Role(name = 'user', description='Simple User'),
     ]
     db.session.add_all(roles)
     db.session.commit()

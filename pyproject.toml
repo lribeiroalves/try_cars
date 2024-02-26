@@ -1,0 +1,22 @@
+[project]
+name = "trycars"
+version = "0.0.1"
+authors = [
+  { name="Lucas Ribeiro", email="lucasribeiroalves@live.com" },
+]
+description = "Website developed in Flask where users can simulate the rent of special cars for a single day."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License ::  MIT License",
+    "Operating System :: Windows 11",
+]
+
+[project.urls]
+Homepage = "https://github.com/lribeiroalves/try_cars"
+Issues = "https://github.com/lribeiroalves/try_cars/issues"
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"

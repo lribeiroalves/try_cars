@@ -1,11 +1,27 @@
 [default]
+DEBUG = true
 TITLE = 'TryCars'
+EXTENSIONS = [
+    "trycars.ext.database.database:init_app",
+    "trycars.ext.commands.commands:init_app",
+    "trycars.ext.mail_client.mail_client:init_app",
+    "trycars.blueprints.development.bp_dev:init_app",
+    "trycars.blueprints.homepage.bp_home:init_app",
+    "trycars.blueprints.auth.bp_auth:init_app",
+]
 # Flask-Mail
 MAIL_SERVER = 'smtp.gmail.com'
 MAIL_PORT = 465
-MAIL_USE_TLS = 0
-MAIL_USE_SSL = 1
+MAIL_USE_TLS = false
+MAIL_USE_SSL = true
 MAIL_DEFAULT_SENDER = 'noreply.trycars@gmail.com'
+
 
 [development]
 SQLALCHEMY_DATABASE_URI = "sqlite:///base.db"
+
+
+[testing]
+DEBUG = false
+TESTING = true
+SQLALCHEMY_DATABASE_URI = "sqlite:///testing.db"

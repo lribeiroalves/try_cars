@@ -25,3 +25,4 @@ SQLALCHEMY_DATABASE_URI = "sqlite:///base.db"
 DEBUG = false
 TESTING = true
 SQLALCHEMY_DATABASE_URI = "sqlite:///testing.db"
+WTF_CSRF_ENABLED = false

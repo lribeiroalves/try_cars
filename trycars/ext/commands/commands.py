@@ -28,9 +28,6 @@ def populate_db():
     ]
     db.session.add_all(data)
     db.session.commit()
-        
-    click.echo([user for user in db.session.execute(db.select(User)).scalars()])
-    click.echo([role for role in db.session.execute(db.select(Role)).scalars()])
 
 
 

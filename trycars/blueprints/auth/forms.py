@@ -38,7 +38,7 @@ def password_check():
         password = field.data
         error = None
         # length
-        if 8 > len(password) > 30:
+        if len(password) < 8 or len(password) > 30:
             error = 'Password must have between 8 and 30 characters.'
         # digits
         elif re.search(r"\d", password) is None:
@@ -50,7 +50,7 @@ def password_check():
         elif re.search(r"[a-z]", password) is None:
             error = 'Password must have at least one lowercase letter'
         # symbols
-        elif re.search(r"[ !#$%&'()*+,-./[\\\]^_`{|}~"+r'"]', password) is None:
+        elif re.search(r"[ !#$@%&'()*+,-./[\\\]^_`{|}~"+r'"]', password) is None:
             error = 'Password must have at least one symbol'
         # strengh
         elif PasswordStats(password).strength() < 0.3:

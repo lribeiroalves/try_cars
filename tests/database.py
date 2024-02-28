@@ -2,7 +2,7 @@ from trycars.ext.database.database import db
 from trycars.ext.database.models import User
 
 class TestDatabase:
-    def test_database_created(self, populate):
+    def test_database_created(self):
         users = db.session.execute(db.select(User)).scalars().fetchall()
         assert len(users) > 0
 

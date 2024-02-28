@@ -16,6 +16,7 @@ def app():
     app =  create_app(FORCE_ENV_FOR_DYNACONF="testing")
     with app.app_context():
         init_db()
+        populate_db()
         yield app
         drop_db()
 
@@ -24,5 +25,6 @@ def app():
 def populate(app):
     """Populates the database for testing"""
     with app.app_context():
-        return populate_db()
+        populate_db()
+        return
     

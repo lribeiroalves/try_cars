@@ -86,9 +86,27 @@ class TestRegisterUser:
         assert error in response.data
     
 
-    def test_required_fields(self, client):
-        # This field is required.
-        pass
+    @pytest.mark.parametrize(
+            ('username', 'email', 'pw', 'c_pw'),
+            (
+                ('', 'test@gmail.com', 'Testing@1234', 'Testing@1234'),
+                ('TestUser', '', 'Testing@1234', 'Testing@1234'),
+                ('TestUser', 'test@gmail.com', '', 'Testing@1234'),
+            )
+    )
+    def test_required_fields(self, client, username, email, pw, c_pw):
+        data = {
+            'username': username,
+            'email': email,
+            'password': pw,
+            'confirm_password': c_pw,
+        }
+
+        response = client.post(self.url, json=data)
+
+        assert response.status_code == 200
+        assert b'This field is required.' in response.data
+        assert 1==0
 
 
     def test_mail_deliverability(self, client):

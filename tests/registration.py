@@ -106,7 +106,6 @@ class TestRegisterUser:
 
         assert response.status_code == 200
         assert b'This field is required.' in response.data
-        assert 1==0
 
 
     def test_mail_deliverability(self, client):

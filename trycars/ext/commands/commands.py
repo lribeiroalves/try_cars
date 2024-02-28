@@ -30,7 +30,18 @@ def populate_db():
     db.session.commit()
 
 
+def roles_db():
+    roles = [
+        Role(name = 'admin', description='Admin User Privileges'),
+        Role(name = 'user', description='Simple User'),
+    ]
+    db.session.add_all(roles)
+    db.session.commit()
+
+    click.echo('Roles Created')
+
+
 
 def init_app(app):
-    for command in [init_db, drop_db, populate_db]:
+    for command in [init_db, drop_db, populate_db, roles_db]:
         app.cli.add_command(app.cli.command()(command))

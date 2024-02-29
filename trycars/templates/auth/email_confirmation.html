@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Email Confirmation{% endblock %}
+
+{% block body %}
+    {% if confirmed == "y" %}
+    <p>
+        Congratulations {{ username }}, your email has been confirmed and your account is active.
+    </p>
+    <p>
+        Click here to be redirected to the login page.
+    </p>
+
+
+    {% elif confirmed == "a" %}
+    <p>
+        Your account is already active.
+    </p>
+    <p>
+        Click here to be redirected to the login page.
+    </p>
+
+
+    {% elif confirmed == "n" %}
+    <p>
+        Sorry, but it was not possible to confirm your email.
+    </p>
+    <form action="{{ url_for('auth.send_new_confirmation_link') }}" method="post">
+        {{ form.csrf_token }}
+        <p>Inform your email account again and we'll send another confirmation link to your email.</p>
+        <p>
+            {{ form.email.label }} <br>
+            {{ form.email(size=100) }}
+        </p>
+        <p>
+            {{ form.recaptcha }}
+        </p>
+        {% if form.email.errors %}
+        <ul>
+            {% for error in form.email.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% if form.recaptcha.errors %}
+        <ul>
+            {% for error in form.recaptcha.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <p>
+            <input type="submit" value="Confirm">
+        </p>
+    </form>
+    {% endif %}
+
+{% endblock %}

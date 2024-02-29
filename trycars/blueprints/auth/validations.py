@@ -60,3 +60,17 @@ def password_check():
             raise ValidationError(error)
     
     return _password_check
+
+
+def email_exists():
+    """Check if an email provided by the user exists in the database, this validation is used on EmailConfirmationForm"""
+
+    def _email_exists(form, field):
+        email = field.data
+
+        user = db.session.execute(db.select(User).filter_by(email=email)).scalar()
+
+        if user is None:
+            raise ValidationError('Email not found.')
+    
+    return _email_exists

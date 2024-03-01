@@ -10,18 +10,21 @@ EXTENSIONS = [
     "trycars.blueprints.auth.bp_auth:init_app",
 ]
 # Flask-Mail
-MAIL_SERVER = 'smtp.office365.com'
+#Gmail
 # MAIL_SERVER = 'smtp.gmail.com'
-MAIL_PORT = 587
 # MAIL_PORT = 465
-MAIL_USE_TLS = true
 # MAIL_USE_TLS = false
 # MAIL_USE_SSL = true
-MAIL_DEFAULT_SENDER = 'lucasribeiroalves@live.com'
 # MAIL_DEFAULT_SENDER = 'noreply.trycars@gmail.com'
+#Outlook
+MAIL_SERVER = 'smtp.office365.com'
+MAIL_PORT = 587
+MAIL_USE_TLS = true
+MAIL_DEFAULT_SENDER = 'no_reply_trycars@outlook.com'
 
 
 [development]
+DEBUG = true
 SQLALCHEMY_DATABASE_URI = "sqlite:///base.db"
 
 

@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 
 from trycars.ext.configuration import configuration
@@ -12,6 +13,9 @@ def minimal_app(**config):
 
 def create_app(**config):
     app = minimal_app(**config)
+    if app.config['TESTING']:
+        os.environ['FLASK_DEBUG'] = 'False'
+        app.config['DEBUG'] = False
     configuration.load_extensions(app)
 
     return app

@@ -2,7 +2,7 @@
 
 Test Manager
 
-Here is the flow controller of the tests.
+This is the flow controller of the unit tests.
 
 Only the tests imported in this file will be executed, in the order of importation.
 

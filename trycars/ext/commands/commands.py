@@ -17,7 +17,6 @@ def drop_db():
 def populate_db():
     data = [
         User(id = 1, email = 'lucasribeiroalves@live.com', username = 'lribeiro', password = '1234', active = True, fs_uniquifier = '0123456789', roles=Role(name = 'admin', description='Admin User Privileges')),
-        User(id = 2, email = 'lu_ks_2009@hotmail.com', username = 'lucasralves', password = '1234', active = True, fs_uniquifier = '9876543210', roles=Role(name = 'user', description='Simple User')),
     ]
     db.session.add_all(data)
     db.session.commit()

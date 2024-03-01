@@ -1,5 +1,8 @@
+from flask import g
+
 from trycars.ext.database.database import db
 from trycars.ext.database.models import User
+from trycars.ext.mail_client.mail_client import mail
 
 import pytest
 
@@ -25,19 +28,38 @@ class TestRegisterUser:
             'confirm_password': 'Testing.01234',
         }
         
-        response = client.post(self.url, json=data)
+        with mail.record_messages() as outbox:
+            response = client.post(self.url, json=data)
 
-        users = db.session.execute(db.select(User)).scalars().fetchall()
-        new_user = users[-1:][0]
-        print(users)
-        print(new_user)
+            assert len(outbox) == 1
+            assert outbox[0].subject == 'TryCars - Email Confirmation'
+            assert 'You have registered your TryCars account succesfully.' in outbox[0].html
 
-        assert response.status_code == 302
-        assert len(users) == 3
-        assert new_user is not None
-        assert new_user.username == 'testUser'
-        assert new_user.email == 'email.teste@gmail.com'
-        assert new_user.roles.name == 'user'
+            t_first_char = outbox[0].html.find("confirm/") + 8
+            t_last_char = outbox[0].html.find("</strong>")
+            g.email_token = outbox[0].html[t_first_char:t_last_char]
+
+            users = db.session.execute(db.select(User)).scalars().fetchall()
+            new_user = users[-1:][0]
+
+            assert response.status_code == 302
+            assert len(users) == 2
+            assert new_user is not None
+            assert new_user.username == 'testUser'
+            assert new_user.email == 'email.teste@gmail.com'
+            assert new_user.active == False
+            assert new_user.roles.name == 'user'
+    
+
+    def test_confirm_email_ok(self, client):
+        response = client.get(f'/auth/confirm/{g.email_token}')
+        print(f'/confirm/{g.email_token}')
+
+        new_user = db.session.execute(db.select(User).filter_by(username='testUser')).scalar()
+
+        assert response.status_code == 200
+        assert b'your email has been confirmed and your account is active.' in response.data
+        assert new_user.active == True
 
     
     @pytest.mark.parametrize(

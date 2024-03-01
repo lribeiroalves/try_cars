@@ -4,4 +4,6 @@ install:
 	pip install -e .
 
 test:
+	cls
 	pytest .\tests\ -v --cov=trycars
+	coverage html

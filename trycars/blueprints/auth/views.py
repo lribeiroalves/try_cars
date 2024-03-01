@@ -88,7 +88,7 @@ def register_views(bp, app):
                 recipients=[form.email.data,],
                 html = f"""
                 <p>
-                    You have registered your TryCars account succesfully.
+                    This is a new confirmation code for your TryCars account.
                 </p>
                 <p>
                     Copy the link

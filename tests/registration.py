@@ -3,6 +3,7 @@ from flask import g
 from trycars.ext.database.database import db
 from trycars.ext.database.models import User
 from trycars.ext.mail_client.mail_client import mail
+from trycars.blueprints.auth.token import generate_confirmation_token
 
 import pytest
 
@@ -53,7 +54,6 @@ class TestRegisterUser:
 
     def test_confirm_email_ok(self, client):
         response = client.get(f'/auth/confirm/{g.email_token}')
-        print(f'/confirm/{g.email_token}')
 
         new_user = db.session.execute(db.select(User).filter_by(username='testUser')).scalar()
 
@@ -61,6 +61,55 @@ class TestRegisterUser:
         assert b'your email has been confirmed and your account is active.' in response.data
         assert new_user.active == True
 
+
+    def test_email_already_confirmed(self, client):
+        response = client.get(f'/auth/confirm/{g.email_token}')
+
+        assert response.status_code == 200
+        assert b'Your account is already active.' in response.data
+
+
+
+    def test_confirm_email_nok(self, app, client):
+        response = client.get('/auth/confirm/wrong_token')
+        assert response.status_code == 200
+        assert b'Sorry, but it was not possible to confirm your email.' in response.data
+        assert b"Inform your email account again and we'll send another confirmation link to your email."
+
+        token = generate_confirmation_token(app, 'email_not_existent_on_db@email.com')
+        assert response.status_code == 200
+        response = client.get(f'/auth/confirm/{token}')
+        assert b'Sorry, but it was not possible to confirm your email.' in response.data
+        assert b"Inform your email account again and we'll send another confirmation link to your email."
+    
+
+    def test_new_confirmation_email(self, client):
+        data = {
+            'email': 'email.teste@gmail.com'
+        }
+        with mail.record_messages() as outbox:
+            response = client.post('/auth/confirmation/send', json=data)
+
+            assert response.status_code == 302
+            assert outbox[0].subject == 'TryCars - Email Confirmation'
+            assert outbox[0].recipients[0] == 'email.teste@gmail.com'
+            assert 'This is a new confirmation code for your TryCars account.' in outbox[0].html
+    
+
+    @pytest.mark.parametrize(
+            ('email'),
+            (
+                ('',),
+                ('not_existent_email@email.com',),
+                ('random text.',),
+            )
+    )
+    def test_validation_new_confirmation(self, client, email):
+        data={'email':email}
+        response = client.post('/auth/confirmation/send', json=data)
+
+        assert b'This field is required.' or b'Email not found.' in response.data
+    
     
     @pytest.mark.parametrize(
             ('username', 'email', 'type', 'tag'),

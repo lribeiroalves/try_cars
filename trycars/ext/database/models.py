@@ -1,3 +1,5 @@
+from flask_login import UserMixin
+
 from .database import db
 from sqlalchemy import String, Integer, DateTime, Boolean, ForeignKey, Table, Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -22,7 +24,7 @@ class Role(db.Model):
         return f'Role(id={self.id}, name={self.name}, desciption={self.description})'
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id:Mapped[int] = mapped_column(primary_key=True)
     email:Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     username:Mapped[Optional[str]] = mapped_column(String(64), unique=True)
@@ -35,3 +37,7 @@ class User(db.Model):
 
     def __repr__(self) -> str:
         return f'User(id={self.id}, email={self.email}, username={self.username})'
+    
+    @property
+    def is_active(self) -> bool:
+        return self.active

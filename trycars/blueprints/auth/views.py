@@ -2,12 +2,13 @@ from flask import render_template, redirect, url_for, render_template_string
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import SystemRandom
 from flask_mail import Message
+from flask_login import login_user, logout_user, current_user
 import datetime
 
 from trycars.ext.database.database import db
 from trycars.ext.database.models import *
 from trycars.ext.mail_client.mail_client import mail
-from .forms import RegisterForm, EmailConfirmationForm
+from .forms import RegisterForm, EmailConfirmationForm, LoginForm
 from .token import generate_confirmation_token, confirm_token
 
 def register_views(bp, app):
@@ -25,7 +26,7 @@ def register_views(bp, app):
             user_role = db.session.execute(db.select(Role).filter_by(name='user')).scalar()
             if user_role is None:
                 user_role = Role(name = 'user', description='Simple User')
-            new_user = User(email=form.email.data, username=form.username.data, active=False, fs_uniquifier=fs, password=generate_password_hash(form.password.data), roles=user_role)
+            new_user = User(email=form.email.data, username=form.username.data, is_active=False, fs_uniquifier=fs, password=generate_password_hash(form.password.data), roles=user_role)
             db.session.add(new_user)
             db.session.commit()
 
@@ -106,3 +107,15 @@ def register_views(bp, app):
         
         else:
             return render_template('auth/email_confirmation.html', confirmed = 'n', form=form)
+
+
+    @bp.route('/login', methods=['GET', 'POST'])
+    def login():
+        form = LoginForm()
+
+        if form.validate_on_submit():
+            user = db.session.execute(db.select(User).filter_by(username=form.login.data)).scalar()
+            if user is not None and check_password_hash(user.password, form.password.data):
+                login_user(user)
+
+        return render_template('auth/login.html', form=form)

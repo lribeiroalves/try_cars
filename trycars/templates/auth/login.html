@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Login{% endblock %}
+
+
+{% block body %}
+<p>{{ current_user }}</p>
+<p>{{ current_user.is_authenticated }}</p>
+<form action="{{ url_for('auth.login') }}" method="post">
+    {{ form.csrf_token }}
+    <p>
+        {{ form.login.label }}
+        {{ form.login(size=20) }}
+    </p>
+    <p>
+        {{ form.password.label }}
+        {{ form.password(size=20) }}
+    </p>
+    <input type="submit" value="Login">
+</form>
+{% if current_user.is_authenticated %}
+    <form action="{{ url_for('auth.logout') }}" method="post">
+        <input type="submit" value="Logout">
+    </form>
+{% endif %}
+{% endblock %}

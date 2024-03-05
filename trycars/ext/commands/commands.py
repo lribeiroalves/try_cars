@@ -1,3 +1,4 @@
+from werkzeug.security import generate_password_hash
 import click
 from trycars.ext.database.database import db
 from trycars.ext.database.models import *
@@ -14,12 +15,14 @@ def drop_db():
     db.drop_all()
     click.echo("Droped the entire database")
 
+
 def populate_db():
+    pw = generate_password_hash('1234')
     data = [
-        User(id = 1, email = 'lucasribeiroalves@live.com', username = 'lribeiro', password = '1234', active = True, fs_uniquifier = '0123456789', roles=Role(name = 'admin', description='Admin User Privileges')),
+        User(id = 1, email = 'lucasribeiroalves@live.com', username = 'lribeiro', password = pw, active = True, fs_uniquifier = '0123456789', roles=Role(name = 'admin', description='Admin User Privileges')),
     ]
     db.session.add_all(data)
-    db.session.commit()
+    db.session.commit()    
 
 
 def init_app(app):

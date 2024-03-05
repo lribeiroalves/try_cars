@@ -26,7 +26,7 @@ def register_views(bp, app):
             user_role = db.session.execute(db.select(Role).filter_by(name='user')).scalar()
             if user_role is None:
                 user_role = Role(name = 'user', description='Simple User')
-            new_user = User(email=form.email.data, username=form.username.data, is_active=False, fs_uniquifier=fs, password=generate_password_hash(form.password.data), roles=user_role)
+            new_user = User(email=form.email.data, username=form.username.data, active=False, fs_uniquifier=fs, password=generate_password_hash(form.password.data), roles=user_role)
             db.session.add(new_user)
             db.session.commit()
 
@@ -117,5 +117,12 @@ def register_views(bp, app):
             user = db.session.execute(db.select(User).filter_by(username=form.login.data)).scalar()
             if user is not None and check_password_hash(user.password, form.password.data):
                 login_user(user)
+            else:
+                return str(check_password_hash(user.password, form.password.data))
 
         return render_template('auth/login.html', form=form)
+    
+
+    @bp.route('/logout', methods=['GET', 'POST'])
+    def logout():
+        return 'logout'

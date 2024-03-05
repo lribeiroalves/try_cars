@@ -5,6 +5,7 @@ EXTENSIONS = [
     "trycars.ext.database.database:init_app",
     "trycars.ext.commands.commands:init_app",
     "trycars.ext.mail_client.mail_client:init_app",
+    "trycars.ext.auth.login:init_app",
     "trycars.blueprints.development.bp_dev:init_app",
     "trycars.blueprints.homepage.bp_home:init_app",
     "trycars.blueprints.auth.bp_auth:init_app",

@@ -1,11 +1,11 @@
-from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, EmailField
+from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField
 from wtforms.validators import DataRequired, Email, EqualTo
 
 from trycars.ext.database.database import db
 from trycars.ext.database.models import *
-from .validations import exclusive_check, password_check, email_exists
+from .validations import exclusive_check, password_check, email_exists, user_exists
 
 
 class RegisterForm(FlaskForm):
@@ -22,5 +22,5 @@ class EmailConfirmationForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    login = StringField('login', validators=[DataRequired()])
+    login = StringField('login', validators=[DataRequired(), user_exists()])
     password = PasswordField('password', validators=[DataRequired()])

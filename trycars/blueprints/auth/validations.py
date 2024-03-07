@@ -74,3 +74,17 @@ def email_exists():
             raise ValidationError('Email not found.')
     
     return _email_exists
+
+
+def user_exists():
+    """Check if the login information provided by the user matches an existent user"""
+
+    def _user_exists(form, field):
+        login = field.data
+
+        user = db.session.execute(db.select(User).filter_by(username=login)).scalar()
+
+        if user is None:
+            raise ValidationError('User not found.')
+    
+    return _user_exists

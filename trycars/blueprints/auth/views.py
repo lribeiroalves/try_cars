@@ -160,3 +160,4 @@ def register_views(bp, app):
 
         return render_template('auth/authentication.html', form_login=form_login, form_register=form_register)
     
+# create the html for the authentication view

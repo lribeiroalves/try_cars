@@ -116,8 +116,8 @@ def register_views(bp, app):
         return 'logout'
     
 
-    @bp.route('/login', methods=['GET', 'POST'])
-    def login():
+    @bp.route('/auth', methods=['GET', 'POST'])
+    def authentication():
         """This view condensate the login and registration forms on a single page"""
 
         # login

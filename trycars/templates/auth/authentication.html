@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Authentication{% endblock %}
+
+{% block body %}
+{{ current_user }}
+<div class="login">
+    <div class="reg-login">
+        <form action="{{ url_for('auth.authentication') }}" method="post">
+            {{ form_login.csrf_token }}
+            <p>{{ form_login.login.label }}</p>
+            <p>{{ form_login.login(size=40) }}</p>
+            {% if form_login.login.errors %}
+                <ul>
+                    {% for error in form_login.login.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <p>{{ form_login.password.label }}</p>
+            <p>{{ form_login.password(size=40) }}</p>
+            {% if form_login.password.errors %}
+                <ul>
+                    {% for error in form_login.password.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <p><input type="submit" value="Login"></p>
+        </form>
+    </div>
+</div>
+<div class="register">
+    <div class="reg-container">
+        <form action="{{ url_for('auth.authentication') }}" method="post">
+            <p>{{ form_register.username.label }}</p>
+            <p>{{ form_register.username(size=40) }}</p>
+            {% if form_register.username.errors %}
+                <ul>
+                    {% for error in form_register.username.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <p>{{ form_register.email.label }}</p>
+            <p>{{ form_register.email(size=40) }}</p>
+            {% if form_register.email.errors %}
+                <ul>
+                    {% for error in form_register.email.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <p>{{ form_register.password.label }}</p>
+            <p>{{ form_register.password(size=40) }}</p>
+            {% if form_register.password.errors %}
+                <ul>
+                    {% for error in form_register.password.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <p>{{ form_register.confirm_password.label }}</p>
+            <p>{{ form_register.confirm_password(size=40) }}</p>
+            {% if form_register.confirm_password.errors %}
+                <ul>
+                    {% for error in form_register.confirm_password.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <p>{{ form_register.recaptcha(size=40) }}</p>
+            {% if form_register.recaptcha.errors %}
+                <ul>
+                    {% for error in form_register.recaptcha.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <input type="submit" value="Register">
+        </form>
+    </div>
+</div>
+{% endblock %}

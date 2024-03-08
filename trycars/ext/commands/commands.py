@@ -19,7 +19,7 @@ def drop_db():
 def populate_db():
     pw = generate_password_hash('1234')
     data = [
-        User(id = 1, email = 'lucasribeiroalves@live.com', username = 'lribeiro', password = pw, active = True, fs_uniquifier = '0123456789', roles=Role(name = 'admin', description='Admin User Privileges')),
+        User(id = 1, email = 'lucasribeiroalves@live.com', username = 'lribeiro', password = pw, active = True, alter_id = '0123456789', roles=Role(name = 'admin', description='Admin User Privileges')),
     ]
     db.session.add_all(data)
     db.session.commit()    

@@ -30,7 +30,7 @@ class User(db.Model, UserMixin):
     username:Mapped[Optional[str]] = mapped_column(String(64), unique=True)
     password:Mapped[str] = mapped_column(String(255), nullable=False)
     active:Mapped[bool] = mapped_column(Boolean())
-    fs_uniquifier:Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
+    alter_id:Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
     confirmed_at:Mapped[Optional[datetime.datetime]] = mapped_column(DateTime(timezone=True))
 
     roles:Mapped['Role'] = relationship(secondary='roles_users', back_populates='users')
@@ -41,3 +41,6 @@ class User(db.Model, UserMixin):
     @property
     def is_active(self) -> bool:
         return self.active
+    
+    def get_id(self):
+        return str(self.alter_id)

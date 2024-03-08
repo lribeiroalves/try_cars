@@ -2,6 +2,7 @@ from flask import request, redirect, url_for, render_template
 from flask_mail import Message
 from werkzeug.utils import secure_filename
 import os
+from flask_login import login_required
 
 from trycars.ext.database.database import db
 from trycars.ext.database.models import *
@@ -20,6 +21,7 @@ def register_views(bp, app):
         }
     
     @bp.route('/email', methods=['GET', 'POST'])
+    @login_required
     def email():
         if request.method == 'POST':
             msg = Message(

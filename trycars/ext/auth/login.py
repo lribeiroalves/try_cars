@@ -9,9 +9,10 @@ login_manager = LoginManager()
 
 @login_manager.user_loader
 def load_user(user_id):
-    return db.session.execute(db.select(User).filter_by(id=user_id)).scalar()
+    return db.session.execute(db.select(User).filter_by(alter_id=user_id)).scalar()
 
 
 def init_app(app):
     login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'auth.authentication'
+    login_manager.session_protection = "strong"

@@ -4,9 +4,12 @@
 
 {% block body %}
 {{ current_user }}
+{% if get_flashed_messages() %}
+<p>{{ get_flashed_messages()[0] }}</p>
+{% endif %}
 <div class="login">
     <div class="reg-login">
-        <form action="{{ url_for('auth.authentication') }}" method="post">
+        <form action="{{ url_for('auth.login') }}" method="post">
             {{ form_login.csrf_token }}
             <p>{{ form_login.login.label }}</p>
             <p>{{ form_login.login(size=40) }}</p>
@@ -32,7 +35,7 @@
 </div>
 <div class="register">
     <div class="reg-container">
-        <form action="{{ url_for('auth.authentication') }}" method="post">
+        <form action="{{ url_for('auth.register') }}" method="post">
             <p>{{ form_register.username.label }}</p>
             <p>{{ form_register.username(size=40) }}</p>
             {% if form_register.username.errors %}

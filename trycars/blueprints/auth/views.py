@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request, abort, g
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import SystemRandom
 from flask_mail import Message
@@ -37,7 +37,7 @@ def send_confirmation_email(token:str, recipients:list, first_link:bool=True) ->
     mail.send(message=confirmation_message)
 
 def register_views(bp, app):
-    @bp.route('/register', methods=['GET', 'POST'])
+    @bp.route('/register', methods=['POST'])
     def register():
         form_register = RegisterForm()
 
@@ -64,9 +64,8 @@ def register_views(bp, app):
                 return render_template('auth/email_confirmation.html', confirmed = 'n', form=form_register)
 
             flash('User Registered Succesfully, check your email for your confirmation link.')
-            return redirect(url_for('homepage.index'))
 
-        return render_template('auth/register.html', form=form_register)
+        return redirect(url_for('auth.authentication'))
 
 
     @bp.route('/confirm/<token>')
@@ -116,48 +115,25 @@ def register_views(bp, app):
         return 'logout'
     
 
-    @bp.route('/auth', methods=['GET', 'POST'])
-    def authentication():
-        """This view condensate the login and registration forms on a single page"""
-
-        # login
+    @bp.route('/login', methods=['POST'])
+    def login():
         form_login = LoginForm()
+        next = request.args.get('next')
+
         if form_login.validate_on_submit():
             user = db.session.execute(db.select(User).filter_by(username=form_login.login.data)).scalar()
             if user is not None and check_password_hash(user.password, form_login.password.data):
                 login_user(user)
+                flash('Logged in Succesfully.')
             else:
                 return str(check_password_hash(user.password, form_login.password.data))
 
-        # -----------------------------------------------------------------------------------------------
-            
-        # registration
+        return redirect(url_for('auth.authentication'))
+    
+
+    @bp.route('/home', methods=['GET', 'POST'])
+    def authentication():
+        form_login = LoginForm()
         form_register = RegisterForm()
-        if form_register.validate_on_submit():
-            # generate unique fs_uniquifier
-            while True:
-                fs = str(SystemRandom().getrandbits(64))[0:15]
-                if db.session.execute(db.select(User).filter_by(fs_uniquifier=fs)).scalar() is None:
-                    break
-
-            user_role = db.session.execute(db.select(Role).filter_by(name='user')).scalar()
-            if user_role is None:
-                user_role = Role(name = 'user', description='Simple User')
-            new_user = User(email=form_register.email.data, username=form_register.username.data, active=False, fs_uniquifier=fs, password=generate_password_hash(form_register.password.data), roles=user_role)
-            db.session.add(new_user)
-            db.session.commit()
-
-            # email confirmation
-            token = generate_confirmation_token(app, form_register.email.data)
-            try:
-                send_confirmation_email(token, [form_register.email.data])
-            except:
-                flash('Confirmation link has not been sent. Try again.')
-                return render_template('auth/email_confirmation.html', confirmed = 'n', form=form_register)
-
-            flash('User Registered Succesfully, check your email for your confirmation link.')
-            return redirect(url_for('homepage.index'))
 
         return render_template('auth/authentication.html', form_login=form_login, form_register=form_register)
-    
-# create the html for the authentication view

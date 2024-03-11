@@ -123,12 +123,19 @@ def register_views(bp, app):
 
         if form.validate_on_submit():
             user = db.session.execute(db.select(User).filter_by(username=form.login.data)).scalar()
-            if user is not None and check_password_hash(user.password, form.password.data):
-                login_user(user)
-                flash('Logged in Succesfully.')
-                return redirect(form.next.data)
+            if user.is_active:
+                if check_password_hash(user.password, form.password.data):
+                    login_user(user)
+                    flash('Logged in Succesfully.')
+                    if form.next.data == 'None':
+                        return redirect(url_for('homepage.index'))
+                    else:
+                        return redirect(form.next.data)
+                else:
+                    flash('Incorrect password.')
+                    return redirect(url_for('auth.authentication'))
             else:
-                return str(check_password_hash(user.password, form.password.data))
+                return redirect(url_for('auth.send_new_confirmation_link'))
 
         return redirect(url_for('auth.authentication'))
     

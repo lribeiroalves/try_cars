@@ -83,8 +83,10 @@ def user_exists():
         login = field.data
 
         user = db.session.execute(db.select(User).filter_by(username=login)).scalar()
+        
 
         if user is None:
+            print(user)
             raise ValidationError('User not found.')
     
     return _user_exists

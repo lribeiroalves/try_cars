@@ -22,6 +22,7 @@
             {% endif %}
             <p>{{ form_login.password.label }}</p>
             <p>{{ form_login.password(size=40) }}</p>
+            {{ form_login.next(value=next) }}
             {% if form_login.password.errors %}
                 <ul>
                     {% for error in form_login.password.errors %}

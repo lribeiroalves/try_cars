@@ -112,21 +112,23 @@ def register_views(bp, app):
 
     @bp.route('/logout', methods=['GET', 'POST'])
     def logout():
+        if current_user.is_authenticated:
+            logout_user()
         return 'logout'
     
 
     @bp.route('/login', methods=['POST'])
     def login():
-        form_login = LoginForm()
-        next = request.args.get('next')
+        form = LoginForm()
 
-        if form_login.validate_on_submit():
-            user = db.session.execute(db.select(User).filter_by(username=form_login.login.data)).scalar()
-            if user is not None and check_password_hash(user.password, form_login.password.data):
+        if form.validate_on_submit():
+            user = db.session.execute(db.select(User).filter_by(username=form.login.data)).scalar()
+            if user is not None and check_password_hash(user.password, form.password.data):
                 login_user(user)
                 flash('Logged in Succesfully.')
+                return redirect(form.next.data)
             else:
-                return str(check_password_hash(user.password, form_login.password.data))
+                return str(check_password_hash(user.password, form.password.data))
 
         return redirect(url_for('auth.authentication'))
     
@@ -136,4 +138,6 @@ def register_views(bp, app):
         form_login = LoginForm()
         form_register = RegisterForm()
 
-        return render_template('auth/authentication.html', form_login=form_login, form_register=form_register)
+        next = request.args.get('next')
+        
+        return render_template('auth/authentication.html', form_login=form_login, form_register=form_register, next=next)

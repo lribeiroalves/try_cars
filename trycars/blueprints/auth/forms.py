@@ -1,4 +1,4 @@
-from wtforms import StringField, PasswordField, EmailField
+from wtforms import StringField, PasswordField, EmailField, HiddenField
 from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import RecaptchaField
 from wtforms.validators import DataRequired, Email, EqualTo
@@ -24,3 +24,4 @@ class EmailConfirmationForm(FlaskForm):
 class LoginForm(FlaskForm):
     login = StringField('login', validators=[DataRequired(), user_exists()])
     password = PasswordField('password', validators=[DataRequired()])
+    next = HiddenField('next')
